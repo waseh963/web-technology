@@ -1,1 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 6 - Responsive Design</title>
+    <style>
+        body {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            background: #ecec94;
+            color: #597b81;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.4;
+        }
+        
+        .paper {
+            background: rgb(226, 229, 240);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 3px double #ccc;
+            padding-bottom: 15px;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+        
+        .info-box {
+            background: #f8f8f8;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .desktop-view {
+            background: #fff;
+            border: 2px solid #7f8c8d;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .mobile-view {
+            display: none;
+            background: #fff;
+            border: 2px solid #7f8c8d;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        ul.desktop-list {
+            list-style: decimal;
+            padding-left: 30px;
+        }
+        
+        ul.desktop-list li {
+            padding: 8px 0;
+            border-bottom: 1px dotted #ddd;
+        }
+        
+        ul.mobile-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        ul.mobile-list li {
+            background: #ecf0f1;
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .note {
+            background: #fffde7;
+            border: 1px solid #ffd54f;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                background: #e8f4f8;
+                padding: 10px;
+            }
+            
+            .paper {
+                padding: 20px;
+                box-shadow: none;
+                border: none;
+            }
+            
+            .desktop-view {
+                display: none;
+            }
+            
+            .mobile-view {
+                display: block;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="paper">
+        <h1>Web Technologies Laboratory</h1>
+        
+        <div class="info-box">
+            <h2 style="margin:0; color:#0860b8;">CSS-336 (2+1)</h2>
+            <p style="margin:5px 0;">Fall 2025</p>
+            <p><strong>Name:</strong><b> Abdul Waseh</b></p>
+            <p><strong>ID:</strong><b>FA22-BCE-025</b></p>
+        </div>
+        
+        <p style="font-size:18px; margin:30px 0 10px;">Laboratory Experiments:</p>
+        
+        <div class="desktop-view">
+            <h3 style="color:#0d7dec; margin-top:0;">Desktop View</h3>
+            <ul class="desktop-list">
+                <li>Experiment 1: Task1</li>
+                <li>Experiment 2: Task2</li>
+                <li>Experiment 3: Task3</li>
+                <li>Experiment 4: Task4</li>
+                <li>Experiment 5: Task5</li>
+                <li>Experiment 6: Task6</li>
+            </ul>
+        </div>
+        
+        <div class="mobile-view">
+            <h3 style="color:#2c3e50; margin-top:0;">Mobile View</h3>
+            <ul class="mobile-list">
+                <li>Lab Task 1</li>
+                <li>Lab Task 2</li>
+                <li>Lab Task 3</li>
+                <li>Lab Task 4</li>
+                <li>Lab Task 5</li>
+                <li>Lab Task 6</li>
+            </ul>
+        </div>
+        
+        <div class="note">
+            <strong>Note:</strong> This page shows responsive design.
+        </div>
+    </div>
+</body>
 
