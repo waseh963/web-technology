@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 8 - Event Listeners</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #5dc6e0;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
+        }
+        
+        .notebook {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgb(62, 148, 148);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .notebook:before {
+            content: '';
+            position: absolute;
+            left: 40px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #58548f;
+        }
+        
+        .page {
+            padding: 40px 40px 40px 60px;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            color: #411952;
+            border-bottom: 2px solid #137e77;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        
+        .activity {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #c173d4;
+        }
+        
+        .activity h3 {
+            color: #2c557e;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .item {
+            padding: 10px 15px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .item:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        
+        .color-item {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin: 5px;
+            display: inline-block;
+        }
+        
+        .shape-box {
+            width: 70px;
+            height: 70px;
+            background: #a29bfe;
+            margin: 10px;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .counter-display {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            margin: 15px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .counter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px;
+        }
+        
+        .counter-btn {
+            padding: 8px 20px;
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .counter-btn:hover {
+            background: #3db3aa;
+        }
+        
+        .drag-area {
+            height: 150px;
+            border: 2px dashed #aaa;
+            border-radius: 8px;
+            margin: 15px 0;
+            position: relative;
+            background: #f8f9fa;
+        }
+        
+        .drag-ball {
+            width: 60px;
+            height: 60px;
+            background: #468a4f;
+            border-radius: 50%;
+            position: absolute;
+            cursor: move;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgb(247, 241, 241);
+        }
+        
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .game-cell {
+            height: 80px;
+            background: #4b66d4;
+            border: 1px solid #99a6be;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.2s;
+        }
+        
+        .game-cell:hover {
+            background: #412566;
+        }
+        
+        .this-demo {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .this-item {
+            padding: 15px;
+            background: rgb(145, 160, 223);
+            border: 1px solid #ddd;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .log-area {
+            margin-top: 30px;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+        
+        .log-title {
+            color: #4ecdc4;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        #eventLog {
+            height: 120px;
+            overflow-y: auto;
+            font-size: 13px;
+            background: #34495e;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            border-top: 1px solid #eee;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="notebook">
+        <div class="page">
+            <h1>Event Listeners Laboratory</h1>
+            <p><strong>Course:</strong> CSS-336 | <strong>REG NO:</strong> FA22-BCE-025</p>
+            
+            <div class="activity">
+                <h3>Color Selector</h3>
+                <p>Click colors :</p>
+                <div>
+                    <div class="color-item" style="background:#110b0b;" onclick="pickColor('#ff6b6b')"></div>
+                    <div class="color-item" style="background:#4e76cd;" onclick="pickColor('#4ecdc4')"></div>
+                    <div class="color-item" style="background:#e45f7c;" onclick="pickColor('#ffeaa7')"></div>
+                    <div class="color-item" style="background:#f3f572;" onclick="pickColor('#a29bfe')"></div>
+                </div>
+            </div>
+            
+            <div class="activity">
+                <h3>Shape Changer</h3>
+                <p>Click shapes to transform them:</p>
+                <div>
+                    <div class="shape-box" onclick="changeShape(this, 'circle')">◯</div>
+                    <div class="shape-box" onclick="changeShape(this, 'triangle')">△</div>
+                    <div class="shape-box" onclick="changeShape(this, 'square')">□</div>
+                </div>
+            </div>
+            
+            <div class="activity">
+                <h3>Text Modifier</h3>
+                <p>Click text elements:</p>
+                <div class="controls">
+                    <div class="item" onclick="modifyText(this, 'uppercase')">Make uppercase</div>
+                    <div class="item" onclick="modifyText(this, 'reverse')">Reverse text</div>
+                    <div class="item" onclick="modifyText(this, 'color')">Change color</div>
+                </div>
+            </div>
+            
+            <div class="activity">
+                <h3>Number Counter</h3>
+                <div class="counter-display" id="counterDisplay">0</div>
+                <div class="counter-buttons">
+                    <button class="counter-btn" onclick="adjustCounter(-1)">Decrease</button>
+                    <button class="counter-btn" onclick="adjustCounter(1)">Increase</button>
+                    <button class="counter-btn" onclick="resetCounter()" style="background:#7f8c8d;">Reset</button>
+                </div>
+            </div>
+            
+            <div class="activity">
+                <h3>Draggable Element</h3>
+                <div class="drag-area" id="dragArea">
+                    <div class="drag-ball" id="dragBall">Drag</div>
+                </div>
+            </div>
+            
+            <div class="activity">
+                <h3>Find Objects Game</h3>
+                <p>Click cells to find hidden items:</p>
+                <div class="game-grid" id="gameBoard"></div>
+                <p id="gameStatus">Found: 0/3 objects</p>
+            </div>
+            
+            <div class="activity">
+                <h3>This Keyword Test</h3>
+                <div class="this-demo">
+                    <div class="this-item" onclick="testThis(this)">Element 1</div>
+                    <div class="this-item" onclick="testThis(this)">Element 2</div>
+                    <div class="this-item" onclick="testThis(this)">Element 3</div>
+                    <div class="this-item" onclick="testThis(this)">Element 4</div>
+                </div>
+            </div>
+            
+            <div class="log-area">
+                <div class="log-title">Activity Log:</div>
+                <div id="eventLog">Ready for interactions...</div>
+            </div>
+            
+            <footer>
+                <p>Event Listeners Lab | JavaScript Interactions | Fall 2025</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        let counter = 0;
+        let found = 0;
+        let isDragging = false;
+        let offsetX, offsetY;
+        
+        // Log function
+        function addLog(message) {
+            const log = document.getElementById('eventLog');
+            const time = new Date().toLocaleTimeString();
+            log.innerHTML += `[${time}] ${message}<br>`;
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // Color picker
+        function pickColor(color) {
+            document.querySelector('.notebook').style.backgroundColor = color + '20';
+            addLog(`Selected color: ${color}`);
+        }
+        
+        // Shape changer
+        function changeShape(element, type) {
+            if (type === 'circle') {
+                element.style.borderRadius = '50%';
+            } else if (type === 'triangle') {
+                element.style.borderRadius = '0';
+                element.style.clipPath = 'polygon(50% 0%, 0% 100%, 100% 100%)';
+            } else if (type === 'square') {
+                element.style.borderRadius = '0';
+                element.style.clipPath = '';
+            }
+            addLog(`Changed shape to ${type}`);
+        }
+        
+        // Text modifier
+        function modifyText(element, action) {
+            const original = element.textContent;
+            if (action === 'uppercase') {
+                element.textContent = element.textContent.toUpperCase();
+                element.style.color = '#ff6b6b';
+            } else if (action === 'reverse') {
+                element.textContent = element.textContent.split('').reverse().join('');
+                element.style.color = '#4ecdc4';
+            } else if (action === 'color') {
+                element.style.backgroundColor = '#a29bfe';
+                element.style.color = 'white';
+            }
+            setTimeout(() => {
+                element.textContent = original;
+                element.style = '';
+            }, 1000);
+            addLog(`Modified text: ${original}`);
+        }
+        
+        // Counter
+        function adjustCounter(value) {
+            counter += value;
+            document.getElementById('counterDisplay').textContent = counter;
+            addLog(`Counter ${value > 0 ? 'increased' : 'decreased'} to ${counter}`);
+        }
+        
+        function resetCounter() {
+            counter = 0;
+            document.getElementById('counterDisplay').textContent = counter;
+            addLog('Counter reset to 0');
+        }
+        
+        // Draggable element
+        const dragBall = document.getElementById('dragBall');
+        const dragArea = document.getElementById('dragArea');
+        
+        dragBall.addEventListener('mousedown', startDragging);
+        
+        function startDragging(e) {
+            isDragging = true;
+            offsetX = e.clientX - dragBall.getBoundingClientRect().left;
+            offsetY = e.clientY - dragBall.getBoundingClientRect().top;
+            document.addEventListener('mousemove', dragElement);
+            document.addEventListener('mouseup', stopDragging);
+            dragBall.style.cursor = 'grabbing';
+            addLog('Started dragging');
+        }
+        
+        function dragElement(e) {
+            if (!isDragging) return;
+            const x = e.clientX - offsetX - dragArea.getBoundingClientRect().left;
+            const y = e.clientY - offsetY - dragArea.getBoundingClientRect().top;
+            
+            const maxX = dragArea.clientWidth - dragBall.clientWidth;
+            const maxY = dragArea.clientHeight - dragBall.clientHeight;
+            
+            dragBall.style.left = Math.max(0, Math.min(x, maxX)) + 'px';
+            dragBall.style.top = Math.max(0, Math.min(y, maxY)) + 'px';
+        }
+        
+        function stopDragging() {
+            isDragging = false;
+            document.removeEventListener('mousemove', dragElement);
+            dragBall.style.cursor = 'move';
+            addLog('Stopped dragging');
+        }
+        
+        // Game setup
+        const gameBoard = document.getElementById('gameBoard');
+        const hiddenCells = new Set();
+        
+        for (let i = 0; i < 9; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'game-cell';
+            cell.textContent = '?';
+            cell.onclick = function() {
+                if (hiddenCells.has(i) && !this.classList.contains('found')) {
+                    this.classList.add('found');
+                    this.textContent = '✓';
+                    this.style.backgroundColor = '#4ecdc4';
+                    found++;
+                    document.getElementById('gameStatus').textContent = `Found: ${found}/3 objects`;
+                    addLog(`Found object ${found}`);
+                    
+                    if (found === 3) {
+                        setTimeout(() => alert('All objects found!'), 300);
+                    }
+                } else if (!this.classList.contains('found')) {
+                    this.textContent = '✗';
+                    this.style.backgroundColor = '#ff6b6b';
+                    setTimeout(() => {
+                        this.textContent = '?';
+                        this.style.backgroundColor = '';
+                    }, 500);
+                    addLog('Clicked empty cell');
+                }
+            };
+            gameBoard.appendChild(cell);
+        }
+        
+        // Place 3 hidden objects
+        while (hiddenCells.size < 3) {
+            hiddenCells.add(Math.floor(Math.random() * 9));
+        }
+        
+        // This keyword test
+        function testThis(element) {
+            const oldText = element.textContent;
+            element.textContent = 'Clicked!';
+            element.style.backgroundColor = '#ff6b6b';
+            element.style.color = 'white';
+            addLog(`Clicked element: ${oldText}`);
+            
+            setTimeout(() => {
+                element.textContent = oldText;
+                element.style = '';
+            }, 800);
+        }
+        
+        addLog('Laboratory initialized');
+    </script>
+</body>
+</html>

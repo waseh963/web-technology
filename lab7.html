@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 7 - JavaScript Basics</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #5f9191;
+            color: #c71e1e;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .terminal {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #34575a;
+            border: 2px solid #1c0875;
+            padding: 0;
+        }
+        
+        .header {
+            background: #007acc;
+            color: rgb(161, 60, 60);
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .section {
+            margin: 25px 0;
+            border-left: 3px solid #007acc;
+            padding-left: 15px;
+        }
+        
+        .section h3 {
+            color: #569cd6;
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+        
+        .command {
+            background: #2f2f3a;
+            padding: 12px;
+            margin: 10px 0;
+            border-left: 4px solid #dcdcaa;
+        }
+        
+        .btn {
+            background: #0e639c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .btn:hover {
+            background: #1177bb;
+        }
+        
+        .output {
+            background: #2d2d30;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #3e3e42;
+            display: none;
+        }
+        
+        .prompt {
+            color: #4ec9b0;
+        }
+        
+        .result {
+            color: #dcdcaa;
+        }
+        
+        .log {
+            background: #1e1e1e;
+            padding: 15px;
+            margin-top: 20px;
+            border-top: 2px solid #007acc;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 13px;
+        }
+        
+        .log-line {
+            margin: 3px 0;
+            padding-left: 10px;
+            border-left: 2px solid #4ec9b0;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: #d12e2e;
+            font-size: 12px;
+            border-top: 1px solid #3e3e42;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="header">
+            <h2 style="margin:0;">JavaScript Fundamentals Lab</h2>
+            <p style="margin:5px 0 0; font-size:14px;">Course: CSS-336 | Student: FA22-BCE-025</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h3>Basic JavaScript Operations</h3>
+                <div class="command">alert 'Welcome to JavaScript':</div>
+                <button class="btn" onclick="alert('Welcome to JavaScript!')">Run Alert</button>
+                <button class="btn" onclick="consoleLog('Test message logged')">Console Log</button>
+            </div>
+            
+            <div class="section">
+                <h3>Task 1: User Input</h3>
+                <div class="command">prompt ("Enter your name ");</div>
+                <button class="btn" onclick="getUserInfo()">Start Task 1</button>
+                <div id="task1Output" class="output">
+                    <span class="prompt">User Information:</span><br>
+                    <span class="result" id="userResult"></span>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>Task 2: Arithmetic Operations</h3>
+                <div class="command">let a = 10; let b = 3;</div>
+                <button class="btn" onclick="doCalculations()">Start Task 2</button>
+                <div id="task2Output" class="output">
+                    <span class="prompt">Calculation Results:</span><br>
+                    <span class="result" id="calcResult"></span>
+                </div>
+            </div>
+            
+            <div class="log">
+                <div style="color:#569cd6; margin-bottom:10px;">Console Output:</div>
+                <div id="consoleLog">System: Lab initialized...</div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>JavaScript Basics Lab | Fall 2025 | All functions operational</p>
+        </footer>
+    </div>
+
+    <script>
+        function consoleLog(message) {
+            const logDiv = document.getElementById('consoleLog');
+            logDiv.innerHTML += `<div class="log-line">> ${message}</div>`;
+            console.log(message);
+        }
+        
+        function getUserInfo() {
+            const name = prompt("Enter your full name:");
+            if (!name) return;
+            
+            const id = prompt("Enter registration ID:");
+            if (!id) return;
+            
+            alert(`Name: ${name}\nID: ${id}`);
+            
+            document.getElementById('userResult').innerHTML = 
+                `Name: ${name}<br>ID: ${id}`;
+            document.getElementById('task1Output').style.display = 'block';
+            
+            consoleLog(`User input - Name: ${name}, Type: ${typeof name}`);
+            consoleLog(`User input - ID: ${id}, Type: ${typeof id}`);
+        }
+        
+        function doCalculations() {
+            const num1 = parseFloat(prompt("Enter first number:", "15"));
+            const num2 = parseFloat(prompt("Enter second number:", "4"));
+            
+            if (isNaN(num1) || isNaN(num2)) {
+                alert("Invalid numbers entered!");
+                return;
+            }
+            
+            const sum = num1 + num2;
+            const diff = num1 - num2;
+            const product = num1 * num2;
+            const quotient = (num1 / num2).toFixed(2);
+            const isGreater = num1 > num2;
+            
+            const results = `
+                Numbers: ${num1}, ${num2}<br>
+                Sum: ${num1} + ${num2} = ${sum}<br>
+                Difference: ${num1} - ${num2} = ${diff}<br>
+                Product: ${num1} × ${num2} = ${product}<br>
+                Quotient: ${num1} ÷ ${num2} = ${quotient}<br>
+                ${num1} > ${num2} = ${isGreater}
+            `;
+            
+            alert("Results:\n" + results.replace(/<br>/g, '\n'));
+            
+            document.getElementById('calcResult').innerHTML = results;
+            document.getElementById('task2Output').style.display = 'block';
+            
+            consoleLog(`Calculation: ${num1} + ${num2} = ${sum}`);
+            consoleLog(`Comparison: ${num1} > ${num2} = ${isGreater}`);
+        }
+        
+        consoleLog("System ready for JavaScript operations");
+    </script>
+</body>
+</html>
