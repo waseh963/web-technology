@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experiment 9: Callback Functions — Fixed</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #1e1e1e;
+      color: #eee;
+    }
+    .container {
+      background-color: #2b2b2b;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+    h1, h2 {
+      color: #f0f0f0;
+    }
+    .button-group {
+      margin: 15px 0;
+    }
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 3px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .visual-area {
+      width: 100%;
+      height: 200px;
+      background-color: #333;
+      border: 2px solid #444;
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .box {
+      width: 100px;
+      height: 100px;
+      background-color: #8e44ad;
+      border-radius: 10px;
+      transition: all 0.5s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .output-box {
+      width: 100%;
+      height: 150px;
+      background-color: #222;
+      color: #0f0;
+      padding: 10px;
+      border-radius: 3px;
+      font-family: monospace;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+
+    /* Animations */
+    @keyframes spinAndColor {
+      0% { transform: rotate(0deg); background-color: #8e44ad; }
+      50% { transform: rotate(180deg); background-color: #e67e22; }
+      100% { transform: rotate(360deg); background-color: #3498db; }
+    }
+    @keyframes expandContract {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.4); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Experiment 9: Callback Functions — Fixed</h1>
+    <div class="section">
+      <h2>Action Controls</h2>
+      <div class="button-group">
+        <button onclick="changeColor()">Change Color</button>
+        <button onclick="changeShape()">Change Shape</button>
+        <button onclick="startAnimation()">Start Animation</button>
+        <button onclick="resetBox()">Reset Box</button>
+      </div>
+      <div class="visual-area">
+        <div class="box" id="demoBox"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Mode Selection</h2>
+      <div class="button-group">
+        <button onclick="setMode('normal')">Normal Mode</button>
+        <button onclick="setMode('random')">Random Mode</button>
+        <button onclick="setMode('fast')">Fast Mode</button>
+      </div>
+      <p>Current Mode: <span id="currentMode">normal</span></p>
+    </div>
+
+    <div class="section">
+      <h2>Size & Rotation Controller</h2>
+      <div class="slider-container">
+        <label>Box Size: <span id="sizeValue">100</span>px</label>
+        <input type="range" id="sizeSlider" min="50" max="200" value="100" oninput="updateBoxSize(this.value)">
+      </div>
+      <div class="slider-container">
+        <label>Rotation: <span id="rotateValue">0</span>°</label>
+        <input type="range" id="rotateSlider" min="0" max="360" value="0" oninput="rotateBox(this.value)">
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Special Action (Higher-Order Function)</h2>
+      <div class="button-group">
+        <button onclick="performAction(changeColor, 'color')">Change Color with Effect</button>
+        <button onclick="performAction(changeShape, 'shape')">Change Shape with Effect</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Action Log</h2>
+      <div class="output-box" id="actionLog">
+        <div class="log-entry">System ready. Click buttons to start.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentMode = 'normal';
+    let box = document.getElementById('demoBox');
+    let log = document.getElementById('actionLog');
+    let colorIndex = 0;
+    let shapeIndex = 0;
+    const colors = ['#8e44ad', '#e74c3c', '#2ecc71', '#3498db', '#f1c40f'];
+    const shapes = ['square', 'circle', 'triangle', 'diamond', 'star'];
+
+    function showLog(message) {
+      const entry = document.createElement('div');
+      entry.className = 'log-entry';
+      entry.textContent = new Date().toLocaleTimeString() + ' - ' + message;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+      if (log.children.length > 10) log.removeChild(log.firstChild);
+    }
+
+    function changeColor() {
+      let newColor;
+      if (currentMode === 'normal') {
+        newColor = colors[colorIndex % colors.length];
+        colorIndex++;
+      } else if (currentMode === 'random') {
+        newColor = colors[Math.floor(Math.random() * colors.length)];
+      } else { // fast
+        newColor = (colorIndex % 2 === 0) ? '#FF0000' : '#00FFFF';
+        colorIndex++;
+      }
+      box.style.backgroundColor = newColor;
+      showLog("Box color changed to: " + newColor);
+    }
+
+    function changeShape() {
+      let shapeType = shapes[shapeIndex % shapes.length];
+      shapeIndex++;
+
+      box.style.transition = 'all 0.5s ease';
+      box.style.backgroundColor = colors[colorIndex % colors.length];
+
+      // reset
+      box.style.clipPath = 'none';
+      box.style.borderRadius = '0';
+      box.style.transform = '';
+      box.style.width = '100px';
+      box.style.height = '100px';
+
+      switch (shapeType) {
+        case 'circle':
+          box.style.borderRadius = '50%';
+          break;
+        case 'triangle':
+          box.style.width = '0';
+          box.style.height = '0';
+          box.style.borderLeft = '50px solid transparent';
+          box.style.borderRight = '50px solid transparent';
+          box.style.borderBottom = '100px solid ' + colors[colorIndex % colors.length];
+          break;
+        case 'diamond':
+          box.style.clipPath = 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)';
+          break;
+        case 'star':
+          box.style.clipPath = 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)';
+          break;
+        default:
+          box.style.borderRadius = '10px';
+      }
+
+      showLog("Shape changed to: " + shapeType);
+    }
+
+    function startAnimation() {
+      if (box.style.animation) {
+        box.style.animation = ''; // reset
+      }
+      let animationName;
+      if (currentMode === 'normal') {
+        animationName = 'spinAndColor';
+        box.style.animation = animationName + ' 3s infinite ease-in-out';
+      } else if (currentMode === 'random') {
+        animationName = 'expandContract';
+        box.style.animation = animationName + ' 2s infinite ease-in-out';
+      } else { // fast
+        animationName = 'spinAndColor';
+        box.style.animation = animationName + ' 1s infinite linear';
+      }
+      showLog("Animation started: " + animationName);
+    }
+
+    function resetBox() {
+      box.style = '';
+      box.className = 'box';
+      box.style.backgroundColor = '#8e44ad';
+      box.style.width = '100px';
+      box.style.height = '100px';
+      box.style.borderRadius = '10px';
+      box.style.clipPath = 'none';
+      box.style.animation = '';
+      showLog("Box reset to default state");
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('currentMode').textContent = mode;
+      showLog("Mode changed to: " + mode);
+    }
+
+    function updateBoxSize(size) {
+      document.getElementById('sizeValue').textContent = size;
+      box.style.width = size + 'px';
+      box.style.height = size + 'px';
+    }
+
+    function rotateBox(deg) {
+      document.getElementById('rotateValue').textContent = deg;
+      box.style.transform = 'rotate(' + deg + 'deg)';
+    }
+
+    // init
+    showLog("System initialized and ready");
+  </script>
+</body>
+</html>
